@@ -3,6 +3,8 @@ debugout.js
 
 (debug output) generates a text document from console.logs that can be emailed, downloaded, `POST`ed, and more. [See some examples below](#outputting).
 
+Debugout accepts any type of object including functions. Debugout is not a monkey patch, but a separate logging class altogether that you use instead of `console`.
+
 Some highlights of debugout:
 
 - access the entire log or just the end of the log at any time
@@ -45,7 +47,9 @@ self.logFilename = 'log.txt'; // filename of log downloaded with downloadLog()
 
 - `log()` - like `console.log()`, but saved!
 - `getLog()` - returns the entire log.
-- `tail()` - returns just the last 100 lines of the log.
+- `tail(numLines)` - returns the last X lines of the log, where X is the number you pass. Defaults to 100.
+- `search(string)` - returns numbered lines where there were matches for your search. Pass a string.
+- `getSlice(start, numLines) - get a 'slice' of the log. Pass the starting line and how many lines after it you want
 - `downloadLog()` - downloads a .txt file of the log. [See example below](#outputting).
 - `clear()` - clears the log.
 - `determineType()` - a more granular version of `typeof` for your convenience
