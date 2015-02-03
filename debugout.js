@@ -110,19 +110,28 @@ function debugout() {
 		if (self.realTimeLoggingOn) console.log('[debugout.js] clear()');
 	}
 	// records a log
-	this.log = function(obj) {
+	this.log = function() {
 		// log in real time
-		if (self.realTimeLoggingOn) console.log(obj);
+		if (self.realTimeLoggingOn) console.log.apply(console,arguments);
 		// record log
-		var type = self.determineType(obj);
-		if (type != null && self.recordLogs) {
-			var addition = self.formatType(type, obj);
-			// timestamp, formatted for brevity
-			if (self.useTimestamps) {
-				var logTime = new Date();
-				self.output += self.formatTimestamp(logTime);
+		var inited=false, i, obj;
+		for (i=0; i<arguments.length; i++) {
+			obj=arguments[i];
+
+			var type = self.determineType(obj);
+			if (type != null && self.recordLogs) {
+				var addition = self.formatType(type, obj);
+				// timestamp, formatted for brevity
+				if (self.useTimestamps && !inited) {
+					var logTime = new Date();
+					self.output += self.formatTimestamp(logTime);
+				}
+				self.output += (inited ? ', ' : '') + addition;
+				inited=true;
 			}
-			self.output += addition+'\n';
+		}
+		if (inited) {
+			self.output+='\n';
 			if (self.autoTrim) self.output = self.trimLog(self.output, self.maxLines);
 			// local storage
 			if (self.useLocalStorage) {
